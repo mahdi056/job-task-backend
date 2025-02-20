@@ -11,7 +11,7 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yhwb0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -31,7 +31,7 @@ async function run() {
       const taskCollection = database.collection('tasks');
 
 
-       // 🟢 GET All Tasks
+       //  GET All Tasks
     app.get('/tasks', async (req, res) => {
       try {
         const tasks = await taskCollection.find({}).toArray();
@@ -41,7 +41,7 @@ async function run() {
       }
     });
 
-    // 🟢 POST (Add a New Task)
+    // POST Add a New Task
     app.post('/tasks', async (req, res) => {
       try {
         const { title, description, category } = req.body;
@@ -53,7 +53,7 @@ async function run() {
           title,
           description,
           category,
-          timestamp: new Date().toISOString(), // Automatically set timestamp
+          timestamp: new Date().toISOString(),
         };
 
         const result = await taskCollection.insertOne(newTask);
@@ -63,7 +63,7 @@ async function run() {
       }
     });
 
-    // 🟢 PUT (Update Task - Title & Description)
+    //  PUT update Task
     app.put('/tasks/:id', async (req, res) => {
       try {
         const { id } = req.params;
@@ -84,7 +84,7 @@ async function run() {
       }
     });
 
-    // 🟢 DELETE a Task
+    // DELETE a Task
     app.delete('/tasks/:id', async (req, res) => {
       try {
         const { id } = req.params;
