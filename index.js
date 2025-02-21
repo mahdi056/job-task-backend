@@ -41,6 +41,9 @@ async function run() {
       }
     });
 
+    
+    
+
     // POST Add a New Task
     app.post('/tasks', async (req, res) => {
       try {
@@ -63,6 +66,9 @@ async function run() {
       }
     });
 
+   
+    
+
     //  PUT update Task
     app.put('/tasks/:id', async (req, res) => {
       try {
@@ -83,6 +89,27 @@ async function run() {
         res.status(500).json({ message: "Failed to update task", error });
       }
     });
+
+
+    // Task reorder
+    app.put('/tasks/reorder', async (req, res) => {
+      try {
+        const { updatedTasks } = req.body; 
+    
+        const bulkOps = updatedTasks.map(task => ({
+          updateOne: {
+            filter: { _id: new ObjectId(task._id) },
+            update: { $set: { category: task.category, position: task.position } },
+          },
+        }));
+    
+        await taskCollection.bulkWrite(bulkOps);
+        res.json({ message: "Tasks reordered successfully" });
+      } catch (error) {
+        res.status(500).json({ message: "Failed to reorder tasks", error });
+      }
+    });
+    
 
     // DELETE a Task
     app.delete('/tasks/:id', async (req, res) => {
